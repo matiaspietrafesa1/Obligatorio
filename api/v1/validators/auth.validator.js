@@ -13,6 +13,7 @@ export const registerSchema = Joi.object({
         "string.min": "El nombre de usuario debe tener al menos {#limit} caracteres",
         "string.max": "El nombre de usuario debe tener como máximo {#limit} caracteres"
     }),
+    email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),
     confirmPassword: Joi.string().valid(Joi.ref('password')).required()
 });
