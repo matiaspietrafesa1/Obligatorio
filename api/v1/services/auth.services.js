@@ -10,7 +10,7 @@ export const loginService = async ({username, password}) => {
         throw err;
     }
 
-    const token = jwt.sign({ id: usuario.id, username }, process.env.JWT_SECRET, { expiresIn: '1d' });
+    const token = jwt.sign({ id: usuario.id, username, plan: usuario.plan}, process.env.JWT_SECRET, { expiresIn: '1d' });
     return token;
 }
 
@@ -24,7 +24,7 @@ export const registerService = async ({username, password}) => {
     const hashPassword = await bcrypt.hash(password, 10);
     const nuevoUsuario = new Usuario({username, password: hashPassword});
     await nuevoUsuario.save();
-    const token = jwt.sign({ id: nuevoUsuario.id, username }, process.env.JWT_SECRET, { expiresIn: '1d' });
+    const token = jwt.sign({ id: nuevoUsuario.id, username, plan: nuevoUsuario.plan }, process.env.JWT_SECRET, { expiresIn: '1d' });
     return token;
 }
 
