@@ -2,6 +2,7 @@ import Joi from "joi";
 import { TIPOS, MONEDAS } from "../data/transacciones.data.js";
 
 export const crearTransaccionSchema = Joi.object({
+  
   tipo: Joi.string().valid(...TIPOS).required(),
   fecha: Joi.date().iso().optional(),
   monto: Joi.number().min(1).required(),

@@ -1,7 +1,11 @@
 import { crearTransaccionService } from "../services/transacciones.services.js";
 
 export const crearTransaccionController = async (req, res) => {
-    const transaccion = await crearTransaccionService(req.body);
+    const transaccionData = {
+        ...req.body,
+        userId: req.user.userId
+    };
+    const transaccion = await crearTransaccionService(transaccionData);
 
     res.status(200).json({message: 'Transaccion registrada', transaccion})
 }

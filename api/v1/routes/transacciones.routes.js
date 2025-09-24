@@ -6,6 +6,6 @@ import { authenticateMiddleware } from "../middlewares/auth.middleware.js";
 
 const router = express.Router();
 
-router.post('/crear', validateBodyMiddleware(crearTransaccionSchema), crearTransaccionController);
+router.post('/crear', authenticateMiddleware, validateBodyMiddleware(crearTransaccionSchema), crearTransaccionController);
 
 export default router;
