@@ -1,0 +1,15 @@
+import mongoose, { now } from "mongoose";
+import {MONEDAS, TIPOS} from "../data/transacciones.data.js";
+
+const { Schema } = mongoose;
+
+const transaccionSchema = new Schema({
+    userId: { type: Schema.Types.ObjectId, ref: 'Usuario', index: true, required: true },
+    tipo: { type: String, enum: TIPOS, required: true },
+    fecha: { type: Date, required: true, default: Date.now},
+    monto: { type: Number, min: 1, required: true },
+    moneda: { type: String, enum: MONEDAS, required: true },
+    description: { type: String, trim: true, maxlength: 140, default: '' },
+});
+
+export default mongoose.model("Transaccion", transaccionSchema);

@@ -14,7 +14,9 @@ export const authenticateMiddleware = (req, res, next) => {
         if(err){
             return res.status(403).json({ error:"Token no válido"})
         }else{
-            req.username = user.username
+            req.username = user.username,
+            req.id = user.userId,
+            req.plan = user.plan
             next();
         }
     })
