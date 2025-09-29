@@ -13,6 +13,7 @@ const transaccionSchema = new Schema({
     fecha: { type: Date, required: true, default: Date.now},
     monto: { type: Number, min: 1, required: true },
     description: { type: String, trim: true, maxlength: 140, default: '' },
+    categoria: { type: Schema.Types.ObjectId, ref: 'Categoria' },
 });
 
 export default mongoose.model("Transaccion", transaccionSchema);

@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Cuenta from "../models/cuenta.model.js";
 import Usuario from "../models/usuario.model.js";
 
@@ -21,4 +22,14 @@ export const actualizarSaldoService = async (cuentaId, monto, tipo) => {
     cuenta.saldo = saldoActual;
 
     await cuenta.save();
+};
+
+
+export const obtenerCuentaService = async (data) => {
+    const { cuentaId, userId } = data;
+    
+    const cuenta = await Cuenta.findById(cuentaId).where({userId}).populate('transacciones');
+
+    if (!cuenta) throw new Error('Cuenta no encontrada o no pertenece al usuario');
+    return cuenta;
 };
