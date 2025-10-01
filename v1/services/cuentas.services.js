@@ -30,6 +30,34 @@ export const obtenerCuentaService = async (data) => {
     
     const cuenta = await Cuenta.findById(cuentaId).where({userId}).populate('transacciones');
 
-    if (!cuenta) throw new Error('Cuenta no encontrada o no pertenece al usuario');
+    if (!cuenta) {
+        let err = new Error("Cuenta no encontrada");
+        err.status = 404;
+        throw err;
+    }
     return cuenta;
 };
+
+export const totalIngresosCuentaService = async (data) => {
+    const { cuentaId, userId } = data;
+    const cuenta = await Cuenta.findById(cuentaId).where({userId}).populate('transacciones');
+    if (!cuenta) {
+        let err = new Error("Cuenta no encontrada");
+        err.status = 404;
+        throw err;
+    }
+    const totalIngresos = cuenta.transacciones.filter(t => t.tipo === 'ingreso').reduce((acc, t) => acc + t.monto, 0);
+    return totalIngresos;
+}
+
+export const totalEgresosCuentaService = async (data) => {
+    const { cuentaId, userId } = data;
+    const cuenta = await Cuenta.findById(cuentaId).where({userId}).populate('transacciones');
+    if (!cuenta) {
+        let err = new Error("Cuenta no encontrada");
+        err.status = 404;
+        throw err;
+    }
+    const totalEgresos = cuenta.transacciones.filter(t => t.tipo === 'egreso').reduce((acc, t) => acc + t.monto, 0);
+    return totalEgresos;
+}

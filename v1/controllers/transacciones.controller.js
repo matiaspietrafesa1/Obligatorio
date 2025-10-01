@@ -1,4 +1,4 @@
-import { crearTransaccionService } from "../services/transacciones.services.js";
+import { crearTransaccionService, obtenerTransaccionesRecientesService } from "../services/transacciones.services.js";
 
 export const crearTransaccionController = async (req, res) => {
     const transaccionData = {
@@ -8,4 +8,11 @@ export const crearTransaccionController = async (req, res) => {
     const transaccion = await crearTransaccionService(transaccionData);
 
     res.status(200).json({message: 'Transaccion registrada', transaccion})
+}
+
+export const obtenerTransaccionesRecientesController = async (req, res) => {
+    const { cuentaId } = req.params;
+    const userId = req.user.userId;
+    const transacciones = await obtenerTransaccionesRecientesService({ userId, cuentaId });
+    res.status(200).json({ transacciones });
 }

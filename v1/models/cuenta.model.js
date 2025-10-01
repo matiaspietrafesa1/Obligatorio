@@ -11,6 +11,7 @@ const cuentaSchema = new Schema({
     moneda: { type: String, enum: MONEDAS, required: true },
     transacciones: [{ type: mongoose.Schema.Types.ObjectId, ref: "Transaccion"}],
     saldo: { type: Number, default: 0},
+    nombre: { type: String, required: true },
 });
 
 export default mongoose.model("Cuenta", cuentaSchema);

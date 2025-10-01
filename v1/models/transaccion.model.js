@@ -10,7 +10,7 @@ const transaccionSchema = new Schema({
     userId: { type: Schema.Types.ObjectId, ref: 'Usuario', index: true, required: true },
     cuentaId: { type: Schema.Types.ObjectId, ref: 'Cuenta'},
     tipo: { type: String, enum: TIPOS, required: true },
-    fecha: { type: Date, required: true, default: Date.now},
+    fecha: { type: Date, required: true, default: Date.now()},
     monto: { type: Number, min: 1, required: true },
     description: { type: String, trim: true, maxlength: 140, default: '' },
     categoria: { type: Schema.Types.ObjectId, ref: 'Categoria' },
