@@ -42,5 +42,56 @@ export const obtenerTransaccionesRecientesService = async (data) => {
 export const obtenerTransaccionPorIdService = async (data) => {
     const { userId, transaccionId } = data;
     const transaccion = await Transaccion.findById(transaccionId).where({userId}).populate('categoria');
+    if (!transaccion) {
+        let err = new Error("No se encontro la transaccion.");
+        err.status = (404);
+        throw err;
+    }
+    return transaccion;
+}
+
+export const eliminarTransaccionService = async (data) => {
+    const { userId, transaccionId } = data;
+    const transaccion = await Transaccion.findOne({ userId, _id: transaccionId });
+    if (!transaccion) {
+        let err = new Error('Transacción no encontrada');
+        err.status = 404;
+        throw err;
+    }
+    const cuenta = await Cuenta.findById(transaccion.cuentaId);
+    if (cuenta) {
+        cuenta.transacciones = cuenta.transacciones.filter(id => id.toString() !== transaccionId);
+        await cuenta.save();
+    }
+    return Transaccion.deleteOne({ userId, _id: transaccionId });
+}
+
+export const modificarTransaccionService = async (data) => {
+    const { userId, transaccionId, monto, tipo, categoria, descripcion, fecha, cuentaId } = data;
+    
+    const transaccion = await Transaccion.findOne({ _id: transaccionId, userId });
+    if (!transaccion) {
+        let err = new Error('Transacción no encontrada');
+        err.status = 404;
+        throw err;
+    }
+
+    if (categoria) {
+        let nombreCategoria = categoria.toLowerCase().trim();
+        let categoriaDoc = await Categoria.findOne({ nombre: nombreCategoria });
+        if (!categoriaDoc) {
+            categoriaDoc = await crearCategoriaService({ nombre: nombreCategoria, userId });
+        }
+        transaccion.categoria = categoriaDoc._id;
+    }
+
+    if (monto !== undefined) transaccion.monto = monto;
+    if (tipo) transaccion.tipo = tipo;
+    if (descripcion) transaccion.descripcion = descripcion;
+    if (fecha) transaccion.fecha = fecha;
+
+    actualizarSaldoService(cuentaId, transaccion.monto, transaccion.tipo);
+
+    await transaccion.save();
     return transaccion;
 }
