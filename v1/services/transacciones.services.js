@@ -38,3 +38,9 @@ export const obtenerTransaccionesRecientesService = async (data) => {
     const transacciones = await Transaccion.find({ userId, cuentaId }).sort({ fecha: -1 }).limit(5);
     return transacciones;
 }
+
+export const obtenerTransaccionPorIdService = async (cuentaId) => {
+    const { userId, transaccionId } = data;
+    const transaccion = await Transaccion.find({ userId, transaccionId });
+    return transaccion;
+}
