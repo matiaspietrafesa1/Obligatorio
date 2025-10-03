@@ -41,6 +41,6 @@ export const obtenerTransaccionesRecientesService = async (data) => {
 
 export const obtenerTransaccionPorIdService = async (data) => {
     const { userId, transaccionId } = data;
-    const transaccion = await Transaccion.findById(transaccionId).where({userId})
+    const transaccion = await Transaccion.findById(transaccionId).where({userId}).populate('categoria');
     return transaccion;
 }
