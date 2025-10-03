@@ -3,6 +3,7 @@ import authRoutes from './routes/auth.routes.js';
 import {authenticateMiddleware} from './middlewares/auth.middleware.js';
 import transaccionesRoutes from './routes/transacciones.routes.js';
 import cuentasRoutes from "./routes/cuentas.routes.js";
+import usuarioRoutes from "./routes/usuario.routes.js";
 
 const router = express.Router();
 
@@ -17,5 +18,7 @@ router.use(authenticateMiddleware);
 router.use("/cuenta", cuentasRoutes);
 
 router.use("/transaccion", transaccionesRoutes);
+
+router.use("/usuario", usuarioRoutes);
 
 export default router;
