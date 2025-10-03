@@ -20,13 +20,16 @@ export const obtenerTransaccionesRecientesController = async (req, res) => {
     res.status(200).json({ transacciones });
 }
 
-export const obtenerTransaccionPorId = async (req, res) => {
+export const obtenerTransaccionPorIdController = async (req, res) => {
     const transaccionData = {
-        ...req.body,
+        transaccionId: req.params.transaccionId,
         userId: req.user.userId
     };
 
+    console.log(transaccionData);
+    
+
     const transaccion = await obtenerTransaccionPorIdService(transaccionData);
 
-    res.status(200).json({ transacciones });
+    res.status(200).json({ transaccion });
 }
