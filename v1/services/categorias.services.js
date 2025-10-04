@@ -8,3 +8,13 @@ export const crearCategoriaService = async (data) => {
     await usuario.save();
     return await nuevaCategoria.save();
 };
+
+export const obtenerCategoriasService = async (userId) => {
+    const usuario = await Usuario.findById(userId).populate('categorias');
+    console.log(usuario);
+    
+    return usuario.categorias.map(categoria => ({
+        id: categoria._id,
+        nombre: categoria.nombre
+    }));
+};

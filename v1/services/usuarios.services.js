@@ -5,8 +5,8 @@ import { PLAN_PLUS, PLAN_PREMIUM } from "../data/usuarios.data.js";
 export const crearUsuarioService = async (data) => {
     const usuarioNuevo = new Usuario(data);
     await usuarioNuevo.save();
-    crearCuentaService({moneda: 'UYU', userId: usuarioNuevo._id, nombre: 'Cuenta en Pesos'});
-    crearCuentaService({moneda: 'USD', userId: usuarioNuevo._id, nombre: 'Cuenta en Dólares'});
+    crearCuentaService({ moneda: 'UYU', userId: usuarioNuevo._id, nombre: 'Cuenta en Pesos' });
+    crearCuentaService({ moneda: 'USD', userId: usuarioNuevo._id, nombre: 'Cuenta en Dólares' });
     return usuarioNuevo;
 }
 
@@ -17,11 +17,11 @@ export const alternarPlanService = async (userId) => {
         err.status = 404;
         throw err;
     }
-    
+
     // Alternar entre plus y premium
-    if(usuario.plan === PLAN_PLUS) {
+    if (usuario.plan === PLAN_PLUS) {
         usuario.plan = PLAN_PREMIUM;
-    }else{
+    } else {
         let err = new Error("Ya estás en el plan premium");
         err.status = 400;
         throw err;
