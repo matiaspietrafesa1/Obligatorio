@@ -3,7 +3,8 @@ import {
     obtenerTransaccionesRecientesService,
     obtenerTransaccionPorIdService,
     eliminarTransaccionService,
-    modificarTransaccionService
+    modificarTransaccionService,
+    filtrarTransaccionesService
 } from "../services/transacciones.services.js";
 
 export const crearTransaccionController = async (req, res) => {
@@ -55,4 +56,13 @@ export const modificarTransaccionController = async (req, res) => {
     const transaccion = await modificarTransaccionService(transaccionData);
 
     res.status(200).json({ transaccion });
+};
+
+export const filtrarTransaccionesController = async (req, res) => {
+    const { cuentaId, tipo, categoria, fechaInicio, fechaFin } = req.body;
+    const userId = req.user.userId;
+
+    const transacciones = await filtrarTransaccionesService(userId, fechaInicio, fechaFin, categoria, tipo, cuentaId);
+
+    res.status(200).json({ transacciones });
 };

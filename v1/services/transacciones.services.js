@@ -3,6 +3,7 @@ import Cuenta from "../models/cuenta.model.js";
 import { actualizarSaldoService, obtenerCuentaService } from './cuentas.services.js';
 import { crearCategoriaService } from './categorias.services.js';
 import Categoria from '../models/categoria.model.js';
+import Usuario from '../models/usuario.model.js';
 
 
 
@@ -30,6 +31,10 @@ export const crearTransaccionService = async (data) => {
 
     // se esta haciendo un save de cuenta dos veces
 
+    const usuario = await Usuario.findById(data.userId);
+    usuario.cantidadTransacciones += 1;
+    await usuario.save();
+
     return await nuevaTransaccion.save();
 }
 
@@ -41,7 +46,7 @@ export const obtenerTransaccionesRecientesService = async (data) => {
 
 export const obtenerTransaccionPorIdService = async (data) => {
     const { userId, transaccionId } = data;
-    const transaccion = await Transaccion.findById(transaccionId).where({userId}).populate('categoria');
+    const transaccion = await Transaccion.findById(transaccionId).where({ userId }).populate('categoria');
     if (!transaccion) {
         let err = new Error("No se encontro la transaccion.");
         err.status = (404);
@@ -63,12 +68,20 @@ export const eliminarTransaccionService = async (data) => {
         cuenta.transacciones = cuenta.transacciones.filter(id => id.toString() !== transaccionId);
         await cuenta.save();
     }
+
+    await actualizarSaldoService(cuenta._id, transaccion.monto, transaccion.tipo);
+
+    const usuario = await Usuario.findById(userId);
+    usuario.cantidadTransacciones -= 1;
+    await usuario.save();
+
+
     return Transaccion.deleteOne({ userId, _id: transaccionId });
 }
 
 export const modificarTransaccionService = async (data) => {
-    const { userId, transaccionId, monto, tipo, categoria, descripcion, fecha, cuentaId } = data;
-    
+    const { userId, transaccionId, monto, tipo, categoria, descripcion, fecha, cuenta } = data;
+
     const transaccion = await Transaccion.findOne({ _id: transaccionId, userId });
     if (!transaccion) {
         let err = new Error('Transacción no encontrada');
@@ -90,8 +103,40 @@ export const modificarTransaccionService = async (data) => {
     if (descripcion) transaccion.descripcion = descripcion;
     if (fecha) transaccion.fecha = fecha;
 
-    actualizarSaldoService(cuentaId, transaccion.monto, transaccion.tipo);
+    console.log(descripcion);
+    
+    actualizarSaldoService(cuenta, transaccion.monto, transaccion.tipo);
 
     await transaccion.save();
     return transaccion;
 }
+
+export const filtrarTransaccionesService = async (userId, fechaInicio, fechaFin, categoria, tipo, cuentaId) => {
+    let transacciones = await Transaccion.find({ userId }).populate('categoria');
+    if (fechaInicio) {
+        transacciones = transacciones.filter(transaccion => {
+            return transaccion.fecha >= new Date(fechaInicio);
+        });
+    }
+    if (fechaFin) {
+        transacciones = transacciones.filter(transaccion => {
+            return transaccion.fecha <= new Date(fechaFin);
+        });
+    }
+    if (categoria) {
+        transacciones = transacciones.filter(transaccion => {
+            return transaccion.categoria.nombre === categoria;
+        });
+    }
+    if (tipo) {
+        transacciones = transacciones.filter(transaccion => {
+            return transaccion.tipo === tipo;
+        });
+    }
+    if (cuentaId) {
+        transacciones = transacciones.filter(transaccion => {
+            return transaccion.cuentaId.toString() === cuentaId;
+        });
+    }
+    return transacciones;
+};

@@ -11,7 +11,8 @@ const usuarioSchema = new Schema({
     email: { type: String, required: true},
     plan: { type: String, enum: PLANES, default: PLAN_PLUS },
     cuentas: [{ type: mongoose.Schema.Types.ObjectId, ref: "Cuenta"}],
-    categorias: [{type: mongoose.Schema.Types.ObjectId, ref: 'Categoria'}]
+    categorias: [{type: mongoose.Schema.Types.ObjectId, ref: 'Categoria'}],
+    cantidadTransacciones: { type: Number, default: 0 }
 });
 
 export default mongoose.model("Usuario", usuarioSchema);
