@@ -5,8 +5,8 @@ import jwt from "jsonwebtoken";
 
 export const crearUsuarioService = async (data) => {
     const usuarioNuevo = new Usuario(data);
-    crearCuentaService({ moneda: 'UYU', userId: usuarioNuevo._id, nombre: 'Cuenta en Pesos' });
-    crearCuentaService({ moneda: 'USD', userId: usuarioNuevo._id, nombre: 'Cuenta en Dólares' });
+    await crearCuentaService({ moneda: 'UYU', userId: usuarioNuevo._id, nombre: 'Cuenta en Pesos' });
+    await crearCuentaService({ moneda: 'USD', userId: usuarioNuevo._id, nombre: 'Cuenta en Dólares' });
     await usuarioNuevo.save();
     return usuarioNuevo;
 }
