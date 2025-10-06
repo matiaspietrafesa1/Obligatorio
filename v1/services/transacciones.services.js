@@ -20,9 +20,18 @@ export const crearTransaccionService = async (data) => {
     const nuevaTransaccion = new Transaccion(data);
     const cuenta = await Cuenta.findById(data.cuenta);
 
-    if (cuenta.userId.toString() !== data.userId) {
-        throw new Error('La cuenta no pertenece al usuario');
+    if (!cuenta) {
+        let err = new Error("Cuenta no encontrada");
+        err.status = 400;
+        throw err;
     }
+
+    if (cuenta.userId.toString() !== data.userId) {
+        let err = new Error('La cuenta no pertenece al usuario');
+        err.status = 403;
+        throw err;
+    }
+
     nuevaTransaccion.cuentaId = cuenta._id;
     cuenta.transacciones.push(nuevaTransaccion._id);
     await cuenta.save();
@@ -60,7 +69,7 @@ export const eliminarTransaccionService = async (data) => {
     const transaccion = await Transaccion.findOne({ userId, _id: transaccionId });
     if (!transaccion) {
         let err = new Error('Transacción no encontrada');
-        err.status = 404;
+        err.status = 400;
         throw err;
     }
     const cuenta = await Cuenta.findById(transaccion.cuentaId);

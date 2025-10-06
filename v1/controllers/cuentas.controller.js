@@ -12,7 +12,7 @@ export const crearCuentaController = async (req, res) => {
     };
     const cuenta = await crearCuentaService(cuentaData);
 
-    res.status(200).json({ message: 'Cuenta registrada', cuenta })
+    res.status(201).json({ message: 'Cuenta registrada', cuenta })
 }
 
 export const obtenerCuentaController = async (req, res) => {

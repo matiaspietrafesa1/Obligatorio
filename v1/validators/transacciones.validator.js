@@ -22,7 +22,7 @@ export const modificarTransaccionSchema = Joi.object({
 // este or significa que al menos uno de los campos debe estar presente
 
 export const filtrarTransaccionesSchema = Joi.object({
-  cuentaId: Joi.string().required(),
+  cuentaId: Joi.string().optional(),
   tipo: Joi.string().valid(...TIPOS).optional(),
   categoria: Joi.string().optional(),
   fechaInicio: Joi.date().iso().optional(),

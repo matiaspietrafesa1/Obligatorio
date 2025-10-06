@@ -14,7 +14,7 @@ export const crearTransaccionController = async (req, res) => {
     };
     const transaccion = await crearTransaccionService(transaccionData);
 
-    res.status(200).json({ message: 'Transaccion registrada', transaccion })
+    res.status(201).json({ message: 'Transaccion registrada', transaccion })
 }
 
 export const obtenerTransaccionesRecientesController = async (req, res) => {
@@ -43,7 +43,7 @@ export const eliminarTransaccionController = async (req, res) => {
 
     const transaccion = await eliminarTransaccionService(transaccionData);
 
-    res.status(200).json({ transaccion });
+    res.status(200).json({ message: "Transacción eliminada", transaccion });
 }
 
 export const modificarTransaccionController = async (req, res) => {
