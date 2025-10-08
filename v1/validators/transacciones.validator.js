@@ -11,12 +11,11 @@ export const crearTransaccionSchema = Joi.object({
 });
 
 export const modificarTransaccionSchema = Joi.object({
-  cuenta: Joi.string().required(),
-  tipo: Joi.string().valid(...TIPOS).required(),
-  fecha: Joi.date().iso().optional(),
-  monto: Joi.number().min(1).required(),
+  tipo: Joi.string().valid(...TIPOS).optional(),
+  fecha: Joi.date().iso().max(Date.now()).optional(),
+  monto: Joi.number().min(1).optional(),
   descripcion: Joi.string().trim().max(140).allow('').optional(),
-  categoria: Joi.string().required(),
+  categoria: Joi.string().optional(),
 }).or('cuenta', 'tipo', 'fecha', 'monto', 'descripcion', 'categoria');
 
 // este or significa que al menos uno de los campos debe estar presente

@@ -8,5 +8,6 @@ export const loginController = async (req, res) => {
 
 export const registerController = async (req, res) => {
     const token = await registerService(req.body);
+    
     res.status(201).json({ message: 'User registered successfully', token });
 }

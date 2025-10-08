@@ -33,10 +33,11 @@ export const crearTransaccionService = async (data) => {
     }
 
     nuevaTransaccion.cuentaId = cuenta._id;
+    await nuevaTransaccion.save();
     cuenta.transacciones.push(nuevaTransaccion._id);
     await cuenta.save();
 
-    await actualizarSaldoService(cuenta._id, data.monto, data.tipo);
+    await actualizarSaldoService(cuenta._id);
 
     // se esta haciendo un save de cuenta dos veces
 
@@ -78,18 +79,18 @@ export const eliminarTransaccionService = async (data) => {
         await cuenta.save();
     }
 
-    await actualizarSaldoService(cuenta._id, transaccion.monto, transaccion.tipo);
+    await actualizarSaldoService(cuenta._id);
 
     const usuario = await Usuario.findById(userId);
     usuario.cantidadTransacciones -= 1;
     await usuario.save();
 
 
-    return Transaccion.deleteOne({ userId, _id: transaccionId });
+    return await Transaccion.deleteOne({ userId, _id: transaccionId });;
 }
 
 export const modificarTransaccionService = async (data) => {
-    const { userId, transaccionId, monto, tipo, categoria, descripcion, fecha, cuenta } = data;
+    const { userId, transaccionId, monto, tipo, categoria, descripcion, fecha } = data;
 
     const transaccion = await Transaccion.findOne({ _id: transaccionId, userId });
     if (!transaccion) {
@@ -107,16 +108,15 @@ export const modificarTransaccionService = async (data) => {
         transaccion.categoria = categoriaDoc._id;
     }
 
-    if (monto !== undefined) transaccion.monto = monto;
+    if (monto !== undefined && !isNaN(monto)) transaccion.monto = monto;
     if (tipo) transaccion.tipo = tipo;
     if (descripcion) transaccion.descripcion = descripcion;
     if (fecha) transaccion.fecha = fecha;
 
-    console.log(descripcion);
-    
-    actualizarSaldoService(cuenta, transaccion.monto, transaccion.tipo);
-
     await transaccion.save();
+
+    await actualizarSaldoService(transaccion.cuentaId, transaccion.monto, transaccion.tipo);
+
     return transaccion;
 }
 
