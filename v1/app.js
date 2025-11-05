@@ -25,7 +25,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use(cors({
-    origin: "http://localhost:3000"
+    origin: ["http://localhost:3000", "http://localhost:5173", "https://obligatorio-front-end.vercel.app"]
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
