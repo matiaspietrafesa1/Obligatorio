@@ -59,7 +59,7 @@ export const modificarTransaccionController = async (req, res) => {
 };
 
 export const filtrarTransaccionesController = async (req, res) => {
-    const { cuentaId, tipo, categoria, fechaInicio, fechaFin } = req.body;
+    const { cuentaId, tipo, categoria, fechaInicio, fechaFin } = req.body || {};
     const userId = req.user.userId;
 
     const transacciones = await filtrarTransaccionesService(userId, fechaInicio, fechaFin, categoria, tipo, cuentaId);

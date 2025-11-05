@@ -111,7 +111,11 @@ export const modificarTransaccionService = async (data) => {
     if (monto !== undefined && !isNaN(monto)) transaccion.monto = monto;
     if (tipo) transaccion.tipo = tipo;
     if (descripcion) transaccion.descripcion = descripcion;
-    if (fecha) transaccion.fecha = fecha;
+    if (fecha) {
+        transaccion.fecha = fecha;
+    } else {
+        transaccion.fecha = Date.now();
+    }
 
     await transaccion.save();
 
