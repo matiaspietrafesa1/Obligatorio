@@ -2,7 +2,8 @@ import {
     crearCuentaService,
     obtenerCuentaService,
     totalIngresosCuentaService,
-    totalEgresosCuentaService
+    totalEgresosCuentaService,
+    obtenerCuentasService
 } from "../services/cuentas.services.js";
 
 export const crearCuentaController = async (req, res) => {
@@ -41,4 +42,10 @@ export const totalEgresosCuentaController = async (req, res) => {
     };
     const totalEgresos = await totalEgresosCuentaService(cuentaData);
     res.status(200).json({ message: 'Total egresos de la cuenta', totalEgresos });
+}
+
+export const obtenerCuentasController = async (req, res) => {
+    const userId = req.user.userId;
+    const cuentas = await obtenerCuentasService(userId);
+    res.status(200).json({ message: 'Cuentas del usuario', cuentas });
 }

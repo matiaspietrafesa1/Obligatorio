@@ -68,3 +68,10 @@ export const totalEgresosCuentaService = async (data) => {
     const totalEgresos = cuenta.transacciones.filter(t => t.tipo === 'egreso').reduce((acc, t) => acc + t.monto, 0);
     return totalEgresos;
 }
+
+export const obtenerCuentasService = async (userId) => {
+    // solo traigo los ids de las cuentas del usuario
+    const cuentas = await Cuenta.find({ userId }).select('_id');
+    
+    return cuentas;
+}

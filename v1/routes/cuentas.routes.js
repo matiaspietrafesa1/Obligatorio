@@ -5,7 +5,8 @@ import {
     crearCuentaController, 
     obtenerCuentaController,
     totalIngresosCuentaController,
-    totalEgresosCuentaController
+    totalEgresosCuentaController,
+    obtenerCuentasController
 } from "../controllers/cuentas.controller.js";
 
 const router = express.Router();
@@ -14,5 +15,6 @@ router.post('/crear', validateBodyMiddleware(crearCuentaSchema), crearCuentaCont
 router.get('/:cuentaId', obtenerCuentaController);
 router.get('/total-ingresos/:cuentaId', totalIngresosCuentaController);
 router.get('/total-egresos/:cuentaId', totalEgresosCuentaController);
+router.get('/', obtenerCuentasController);
 
 export default router;
