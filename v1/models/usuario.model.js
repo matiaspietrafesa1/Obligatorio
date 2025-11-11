@@ -12,7 +12,8 @@ const usuarioSchema = new Schema({
     plan: { type: String, enum: PLANES, default: PLAN_PLUS },
     cuentas: [{ type: mongoose.Schema.Types.ObjectId, ref: "Cuenta"}],
     categorias: [{type: mongoose.Schema.Types.ObjectId, ref: 'Categoria'}],
-    cantidadTransacciones: { type: Number, default: 0 }
+    cantidadTransacciones: { type: Number, default: 0 },
+    imagenPerfil: { type: String, default: "" }
 });
 
 export default mongoose.model("Usuario", usuarioSchema);

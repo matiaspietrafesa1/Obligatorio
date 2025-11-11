@@ -45,3 +45,25 @@ export const cantidadTransaccionesService = async (userId) => {
     }
     return usuario.cantidadTransacciones;
 };
+
+export const cargarImagenPerfilService = async (userId, imagenUrl) => {
+    const usuario = await Usuario.findById(userId);
+    if (!usuario) {
+        let err = new Error("Usuario no encontrado");
+        err.status = 404;
+        throw err;
+    }
+    usuario.imagenPerfil = imagenUrl;
+    await usuario.save();
+    return usuario;
+};
+
+export const obtenerImagenPerfilService = async (userId) => {
+    const usuario = await Usuario.findById(userId);
+    if (!usuario) {
+        let err = new Error("Usuario no encontrado");
+        err.status = 404;
+        throw err;
+    }
+    return usuario.imagenPerfil;
+};
