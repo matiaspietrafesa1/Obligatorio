@@ -71,7 +71,7 @@ export const totalEgresosCuentaService = async (data) => {
 
 export const obtenerCuentasService = async (userId) => {
     // solo traigo los ids de las cuentas del usuario
-    const cuentas = await Cuenta.find({ userId }).select('_id');
+    const cuentas = await Cuenta.find({ userId }).select('_id nombre');
     
     return cuentas;
 }
