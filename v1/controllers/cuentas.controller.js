@@ -47,5 +47,5 @@ export const totalEgresosCuentaController = async (req, res) => {
 export const obtenerCuentasController = async (req, res) => {
     const userId = req.user.userId;
     const cuentas = await obtenerCuentasService(userId);
-    res.status(200).json({ message: 'Cuentas del usuario', cuentas });
+    res.status(200).json({ message: 'Cuentas del usuario', cuentas, plan: { tipo: req.user.plan } });
 }
